@@ -144,7 +144,7 @@ docker-buildx-dind:
 	  --build-arg DOCKER_VERSION=${DOCKER_VERSION} \
 	  -f actions-runner-dind.${OS_IMAGE}.dockerfile \
 	  -t "${DIND_RUNNER_NAME}:${OS_IMAGE}" \
-	  . ${PUSH_ARG}
+	  . "${PUSH_ARG}"
 
 docker-buildx-dind-rootless:
 	export DOCKER_CLI_EXPERIMENTAL=enabled ;\

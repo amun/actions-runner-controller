@@ -15,6 +15,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y \
     && apt-get install -y software-properties-common \
     && add-apt-repository -y ppa:git-core/ppa \
+    && add-apt-repository -y ppa:deadsnakes/ppa \
+    && apt-get install python3.8 -y \
     && apt-get update -y \
     && apt-get install -y --no-install-recommends \
     curl \
@@ -22,15 +24,50 @@ RUN apt-get update -y \
     git \
     iptables \
     jq \
+    openssh-client \
+    make \
     software-properties-common \
     sudo \
     unzip \
+    wget \
     zip \
     && rm -rf /var/lib/apt/lists/*
 
 # Download latest git-lfs version
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
     apt-get install -y --no-install-recommends git-lfs
+
+# Install Terraform
+RUN wget https://releases.hashicorp.com/terraform/1.3.3/terraform_1.3.3_linux_amd64.zip && \
+    unzip terraform_1.3.3_linux_amd64.zip && \
+    mv terraform /usr/local/bin/ && \
+    rm terraform_1.3.3_linux_amd64.zip
+# Install Terragrunt
+RUN wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.18/terragrunt_linux_amd64 && \
+    mv terragrunt_linux_amd64 /usr/local/bin/terragrunt && \
+    chmod +x /usr/local/bin/terragrunt
+# Install AWS CLI v2
+RUN wget "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -O "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    sudo ./aws/install && \
+    rm -rf awscliv2.zip aws
+# Install kubectl
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+    chmod +x kubectl && \
+    mv kubectl /usr/local/bin/
+# Install kustomize
+RUN wget https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.0.2/kustomize_v5.0.2_linux_amd64.tar.gz && \
+    tar -xvzf kustomize_v5.0.2_linux_amd64.tar.gz && \
+    mv kustomize /usr/local/bin/kustomize
+# Instal gh cli
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && sudo apt update \
+    && sudo apt-get install gh -y
+
+# Switch the default Python version
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
 
 # Runner user
 RUN adduser --disabled-password --gecos "" --uid $RUNNER_USER_UID runner \
