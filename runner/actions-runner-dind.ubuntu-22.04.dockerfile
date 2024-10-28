@@ -38,12 +38,12 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
     apt-get install -y --no-install-recommends git-lfs
 
 # Install Terraform
-RUN wget https://releases.hashicorp.com/terraform/1.3.3/terraform_1.3.3_linux_amd64.zip && \
-    unzip terraform_1.3.3_linux_amd64.zip && \
+RUN wget https://releases.hashicorp.com/terraform/1.9.0/terraform_1.9.0_linux_amd64.zip && \
+    unzip terraform_1.9.0_linux_amd64.zip && \
     mv terraform /usr/local/bin/ && \
-    rm terraform_1.3.3_linux_amd64.zip
+    rm terraform_1.9.0_linux_amd64.zip
 # Install Terragrunt
-RUN wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.18/terragrunt_linux_amd64 && \
+RUN wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.68.0/terragrunt_linux_amd64 && \
     mv terragrunt_linux_amd64 /usr/local/bin/terragrunt && \
     chmod +x /usr/local/bin/terragrunt
 # Install AWS CLI v2
