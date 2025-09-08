@@ -4,7 +4,8 @@ DEFAULT_RUNNER_NAME ?= ${DOCKER_USER}/actions-runner
 DIND_RUNNER_NAME ?= ${DOCKER_USER}/actions-runner-dind
 DIND_ROOTLESS_RUNNER_NAME ?= ${DOCKER_USER}/actions-runner-dind-rootless
 OS_IMAGE ?= ubuntu-22.04
-TARGETPLATFORM ?= $(shell arch)
+PLATFORM ?= linux/amd64
+TARGETPLATFORM ?= $(PLATFORM)
 
 RUNNER_VERSION ?= 2.319.1
 RUNNER_CONTAINER_HOOKS_VERSION ?= 0.6.1
@@ -70,8 +71,8 @@ docker-build-default: check-target-platform
 	  -f actions-runner.${OS_IMAGE}.dockerfile \
 	  -t ${DEFAULT_RUNNER_NAME}:${OS_IMAGE} .
 
-docker-build-dind: check-target-platform
-	${DOCKER} build \
+docker-build-dind:
+	${DOCKER} build --platform ${TARGETPLATFORM} \
 	  --build-arg TARGETPLATFORM=${TARGETPLATFORM} \
 	  --build-arg RUNNER_VERSION=${RUNNER_VERSION} \
 	  --build-arg RUNNER_CONTAINER_HOOKS_VERSION=${RUNNER_CONTAINER_HOOKS_VERSION} \
