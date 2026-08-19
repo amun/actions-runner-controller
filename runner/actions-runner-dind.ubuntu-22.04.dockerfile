@@ -6,7 +6,7 @@ ARG RUNNER_CONTAINER_HOOKS_VERSION
 # Docker and Docker Compose arguments
 ARG CHANNEL=stable
 ARG DOCKER_VERSION=29.7.2
-ARG DOCKER_COMPOSE_VERSION=v2.23.0
+ARG DOCKER_COMPOSE_VERSION=v2.40.3
 ARG DUMB_INIT_VERSION=1.2.5
 ARG RUNNER_USER_UID=1001
 ARG DOCKER_GROUP_GID=121
@@ -38,12 +38,12 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
     apt-get install -y --no-install-recommends git-lfs
 
 # Install Terraform
-RUN wget https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip && \
-    unzip terraform_1.13.1_linux_amd64.zip && \
+RUN wget https://releases.hashicorp.com/terraform/1.15.8/terraform_1.15.8_linux_amd64.zip && \
+    unzip terraform_1.15.8_linux_amd64.zip && \
     mv terraform /usr/local/bin/ && \
-    rm terraform_1.13.1_linux_amd64.zip
+    rm terraform_1.15.8_linux_amd64.zip
 # Install Terragrunt
-RUN wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.86.0/terragrunt_linux_amd64 && \
+RUN wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.99.5/terragrunt_linux_amd64 && \
     mv terragrunt_linux_amd64 /usr/local/bin/terragrunt && \
     chmod +x /usr/local/bin/terragrunt
 # Install AWS CLI v2
@@ -56,8 +56,8 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
     chmod +x kubectl && \
     mv kubectl /usr/local/bin/
 # Install kustomize
-RUN wget https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.0.2/kustomize_v5.0.2_linux_amd64.tar.gz && \
-    tar -xvzf kustomize_v5.0.2_linux_amd64.tar.gz && \
+RUN wget https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.8.1/kustomize_v5.8.1_linux_amd64.tar.gz && \
+    tar -xvzf kustomize_v5.8.1_linux_amd64.tar.gz && \
     mv kustomize /usr/local/bin/kustomize
 # Instal gh cli
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
